@@ -1,0 +1,23 @@
+{
+  "name": "generator-kudu",
+  "version": "0.1.0",
+  "preferGlobal": true,
+  "scripts": {
+    "compile": "babel -d generators/ generators/ && babel -d lib/ test/",
+    "prepublish": "npm run compile",
+    "test": "npm run compile && mocha generators/test/ -R spec --recursive"
+  },
+  "main": "generators/app/index.js",
+  "dependencies": {
+    "yeoman-generator": "^0.18.9"
+  },
+  "devDependencies": {
+    "babel": "^4.6.4",
+    "mocha": "^2.1.0",
+    "chai": "^2.1.0"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "kudu"
+  ]
+}
