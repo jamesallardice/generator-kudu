@@ -31,8 +31,8 @@ export default class GeneratorKudu extends Base {
       // Copy templates into the new app directory
       templates() {
 
-        this.copy('_package.json', 'package.json');
-        this.copy('_bower.json', 'bower.json');
+        this.copy('_package-json', 'package.json');
+        this.copy('_bower-json', 'bower.json');
         this.copy('editorconfig', '.editorconfig');
         this.copy('gitignore', '.gitignore');
         this.copy('eslintrc', '.eslintrc');
