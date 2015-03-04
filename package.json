@@ -9,7 +9,7 @@
   },
   "main": "generators/app/index.js",
   "dependencies": {
-    "yeoman-generator": "^0.18.9"
+    "yeoman-generator": "^0.18.10"
   },
   "devDependencies": {
     "babel": "^4.6.4",
