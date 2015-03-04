@@ -5,7 +5,7 @@
   "scripts": {
     "compile": "babel -d generators/ generators/ && babel -d lib/ test/",
     "prepublish": "npm run compile",
-    "test": "npm run compile && mocha generators/test/ -R spec --recursive"
+    "test": "npm run compile && mocha lib/ -R spec --recursive"
   },
   "main": "generators/app/index.js",
   "dependencies": {
