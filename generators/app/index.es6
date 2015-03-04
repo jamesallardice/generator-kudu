@@ -17,7 +17,36 @@ export default class GeneratorKudu extends Base {
 
   get prompting() {
 
-    return {};
+    return {
+
+      // Prompt for build system. For now we only support Grunt and Gulp. Each
+      // build script is capable of compiling Babel code to ES5 and copying any
+      // static assets from the source directory into the build directory.
+      buildSystem() {
+
+        if ( this.options.buildSystem ) {
+          return true;
+        }
+
+        let done = this.async();
+        let prompt = [
+          {
+            type: 'list',
+            name: 'buildSystem',
+            message: 'Select a build system:',
+            choices: [
+              'Grunt',
+              'Gulp',
+            ],
+          },
+        ];
+
+        this.prompt(prompt, ( response ) => {
+          this.options.buildSystem = response.buildSystem.toLowerCase();
+          done();
+        });
+      },
+    };
   }
 
   get configuring() {
@@ -36,6 +65,16 @@ export default class GeneratorKudu extends Base {
         this.copy('editorconfig', '.editorconfig');
         this.copy('gitignore', '.gitignore');
         this.copy('eslintrc', '.eslintrc');
+
+        // Build system templates
+        switch ( this.options.buildSystem ) {
+        case 'grunt':
+          this.copy('_gruntfile-js', 'gruntfile.js');
+          break;
+        case 'gulp':
+          this.copy('_gulpfile-js', 'gulpfile.js');
+          break;
+        }
       },
     };
   }

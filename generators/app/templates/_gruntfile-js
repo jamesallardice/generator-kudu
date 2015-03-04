@@ -1,0 +1,73 @@
+'use strict';
+
+module.exports = function ( grunt ) {
+
+  require('load-grunt-tasks')(grunt);
+
+  grunt.initConfig({
+
+    clean: {
+      all: [
+        'lib/',
+      ],
+      views: [
+        'lib/src/server/views/',
+      ],
+    },
+
+    babel: {
+      server: {
+        files: [
+          {
+            expand: true,
+            src: [
+              'src/server/**/*.es6',
+            ],
+            dest: 'lib/',
+            ext: '.js',
+          },
+        ],
+      },
+    },
+
+    copy: {
+      views: {
+        files: [
+          {
+            expand: true,
+            src: [
+              'src/server/views/**/*',
+            ],
+            dest: 'lib/',
+          },
+        ],
+      },
+    },
+
+    watch: {
+      serverES6: {
+        files: [
+          'src/server/**/*.es6',
+        ],
+        tasks: [
+          'babel:server',
+        ],
+      },
+      serverHTML: {
+        files: [
+          'src/server/views/**/*',
+        ],
+        tasks: [
+          'clean:views',
+          'copy',
+        ],
+      },
+    },
+  });
+
+  grunt.registerTask('default', [
+    'clean',
+    'babel',
+    'copy',
+  ]);
+};

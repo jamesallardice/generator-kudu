@@ -1,0 +1,54 @@
+'use strict';
+
+var del = require('del');
+var gulp = require('gulp');
+var babel = require('gulp-babel');
+var extension = require('gulp-ext-replace');
+
+// Clean up build output directories before we attempt to build the app.
+gulp.task('clean', function ( done ) {
+  del([
+    'lib/',
+  ], done);
+});
+
+// Compile ES2015 to ES5 with Babel.
+gulp.task('babel', [
+  'clean',
+], function () {
+
+  return gulp.src('./src/server/**/*.es6', {
+    base: './',
+  })
+  .pipe(babel())
+  .pipe(extension('.js'))
+  .pipe(gulp.dest('lib/'));
+});
+
+// Copy static assets straight to the build output directory.
+gulp.task('copy', [
+  'clean',
+], function () {
+
+  return gulp.src('./src/server/views/**/*', {
+    base: './',
+  })
+  .pipe(gulp.dest('lib/'));
+});
+
+// Watch files for changes and run the appropriate tasks.
+gulp.task('watch', function () {
+  gulp.watch('./src/server/**/*.es6', [
+    'babel',
+  ]);
+  gulp.watch('./src/server/views/**/*', [
+    'copy',
+  ]);
+});
+
+// The default task builds the app in development mode.
+gulp.task('default', [
+  'clean',
+  'babel',
+  'copy',
+]);

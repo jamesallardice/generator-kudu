@@ -3,5 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {<% if ( options.buildSystem === 'grunt' ) { %>
+    "grunt": "~0.4.5",
+    "grunt-babel": "~4.0.0",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-copy": "~0.8.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "load-grunt-tasks": "~3.1.0",<% } %><% if ( options.buildSystem === 'gulp' ) { %>
+    "gulp": "~3.8.11",
+    "gulp-babel": "~4.0.0",
+    "gulp-ext-replace": "~0.1.0",
+    "del": "~1.1.1",<% } %>
+    "eslint": "~0.15.1",
+    "babel-eslint": "~1.0.12"
+  }
 }
