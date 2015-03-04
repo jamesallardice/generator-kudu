@@ -45,8 +45,8 @@ export default class GeneratorKudu extends Base {
           },
         ];
 
-        this.prompt(prompt, ( response ) => {
-          this.options.buildSystem = response.buildSystem.toLowerCase();
+        this.prompt(prompt, ( { buildSystem } ) => {
+          this.options.buildSystem = buildSystem && buildSystem.toLowerCase();
           done();
         });
       },
@@ -72,11 +72,11 @@ export default class GeneratorKudu extends Base {
           },
         ];
 
-        this.prompt(prompt, ( response ) => {
-          if ( response.dbAdapter.match(/^None/) ) {
+        this.prompt(prompt, ( { dbAdapter } ) => {
+          if ( !dbAdapter || dbAdapter.match(/^None/) ) {
             this.options.dbAdapter = null;
           } else {
-            this.options.dbAdapter = response.dbAdapter.toLowerCase();
+            this.options.dbAdapter = dbAdapter.toLowerCase();
           }
           done();
         });
