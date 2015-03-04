@@ -13,6 +13,10 @@ export default class GeneratorKudu extends Base {
       type: String,
       required: false,
     });
+
+    // Configure Lodash templating so it ignores interpolation markers in ES6
+    // template strings.
+    this._.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
   }
 
   get prompting() {
@@ -46,6 +50,37 @@ export default class GeneratorKudu extends Base {
           done();
         });
       },
+
+      // Prompt for Kudu database adapter. The only adapter currently available
+      // is for CouchDB but since this is expected to grow it's a list prompt.
+      databaseAdapter() {
+
+        if ( this.options.dbAdapter ) {
+          return true;
+        }
+
+        let done = this.async();
+        let prompt = [
+          {
+            type: 'list',
+            name: 'dbAdapter',
+            message: 'Select a Kudu database adapter:',
+            choices: [
+              'None, I don\'t need database support this time',
+              'CouchDB',
+            ],
+          },
+        ];
+
+        this.prompt(prompt, ( response ) => {
+          if ( response.dbAdapter.match(/^None/) ) {
+            this.options.dbAdapter = null;
+          } else {
+            this.options.dbAdapter = response.dbAdapter.toLowerCase();
+          }
+          done();
+        });
+      },
     };
   }
 
@@ -65,6 +100,7 @@ export default class GeneratorKudu extends Base {
         this.copy('editorconfig', '.editorconfig');
         this.copy('gitignore', '.gitignore');
         this.copy('eslintrc', '.eslintrc');
+        this.copy('env-example', '.env.example');
 
         // Build system templates
         switch ( this.options.buildSystem ) {
@@ -75,6 +111,8 @@ export default class GeneratorKudu extends Base {
           this.copy('_gulpfile-js', 'gulpfile.js');
           break;
         }
+
+        this.template('server/server-es6', 'src/server/server.es6');
       },
     };
   }

@@ -1,0 +1,2 @@
+export PORT=<%= Math.floor(Math.random() * 10000) + 3000 %>
+<% if ( options.dbAdapter === 'couchdb' ) { %>export COUCHDB_URL='http://127.0.0.1:5984/<%= _.slugify(appname) %>'<% } %>

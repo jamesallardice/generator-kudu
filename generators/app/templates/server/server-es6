@@ -1,0 +1,44 @@
+//
+// IMPORTS
+//
+
+// Kudu imports
+import Kudu from 'kudu';
+<% if ( options.dbAdapter === 'couchdb' ) { %>import CouchAdapter from 'kudu-db-couch';<% } %>
+
+// Express imports
+import express from 'express';
+import bodyParser from 'body-parser';
+
+// Native imports
+import path from 'path';
+import fs from 'fs';
+
+//
+// CONFIGURE EXPRESS
+//
+
+const VIEWS_DIR = path.join(__dirname, 'views');
+
+let expressApp = express();
+expressApp.use(bodyParser.json());
+
+//
+// CONFIGURE KUDU
+//
+
+let app = new Kudu(expressApp, {<% if ( options.dbAdapter === 'couchdb' ) { %>
+  databaseAdapter: CouchAdapter,
+  database: {
+    url: process.env.COUCHDB_URL
+  }<% } %>
+});
+
+//
+// START THE SERVER
+//
+
+let server = expressApp.listen(process.env.PORT, () => {
+  let { address, port } = server.address();
+  console.info(`Listening on http://${ address }:${ port }`);
+});
