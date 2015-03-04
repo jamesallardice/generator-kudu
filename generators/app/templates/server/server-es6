@@ -3,12 +3,13 @@
 //
 
 // Kudu imports
-import Kudu from 'kudu';
-<% if ( options.dbAdapter === 'couchdb' ) { %>import CouchAdapter from 'kudu-db-couch';<% } %>
+import Kudu from 'kudu';<% if ( options.dbAdapter === 'couchdb' ) { %>
+import CouchAdapter from 'kudu-db-couch';<% } %>
 
 // Express imports
 import express from 'express';
-import bodyParser from 'body-parser';
+import bodyParser from 'body-parser';<% if ( options.templateEngine === 'nunjucks' ) { %>
+import nunjucks from 'nunjucks';<% } %>
 
 // Native imports
 import path from 'path';
@@ -21,7 +22,13 @@ import fs from 'fs';
 const VIEWS_DIR = path.join(__dirname, 'views');
 
 let expressApp = express();
-expressApp.use(bodyParser.json());
+expressApp.use(bodyParser.json());<% if ( options.templateEngine === 'nunjucks' ) { %>
+
+nunjucks.configure(VIEWS_DIR, {
+  express: expressApp,
+  autoescape: true
+});<% } %><% if ( options.templateEngine === 'jade' ) { %>
+expressApp.set('view engine', 'jade'); <% } %>
 
 //
 // CONFIGURE KUDU

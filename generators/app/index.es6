@@ -81,6 +81,38 @@ export default class GeneratorKudu extends Base {
           done();
         });
       },
+
+      // Prompt for Express template engine. Currently we only support Nunjucks
+      // and Jade but it should be trivial to add others if necessary.
+      templateEngine() {
+
+        if ( this.options.templateEngine ) {
+          return true;
+        }
+
+        let done = this.async();
+        let prompt = [
+          {
+            type: 'list',
+            name: 'templateEngine',
+            message: 'Select a template engine:',
+            choices: [
+              'None, I don\'t need a template engine this time',
+              'Nunjucks',
+              'Jade',
+            ]
+          }
+        ];
+
+        this.prompt(prompt, ( { templateEngine } ) => {
+          if ( !templateEngine || templateEngine.match(/^None/) ) {
+            this.options.templateEngine = null;
+          } else {
+            this.options.templateEngine = templateEngine.toLowerCase();
+          }
+          done();
+        });
+      },
     };
   }
 
